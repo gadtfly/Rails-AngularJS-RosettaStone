@@ -1,3 +1,4 @@
 %h1 All Comments
-= render @comments
+.comments
+  = render @comments
 = render partial: 'form', locals: { comment: Comment.new }

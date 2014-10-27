@@ -9,18 +9,15 @@ class CommentsController < ApplicationController
   end
 
   def create
-    Comment.create(comment_params)
-    redirect_to :comments
+    @comment = Comment.create(comment_params)
   end
 
   def update
     @comment.update(comment_params)
-    redirect_to :comments
   end
 
   def destroy
     @comment.destroy
-    redirect_to :comments
   end
 
 private
