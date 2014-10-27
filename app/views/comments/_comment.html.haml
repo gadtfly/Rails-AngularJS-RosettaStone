@@ -1,2 +1,4 @@
 .comment
-  = link_to comment.body, comment
+  = comment.body
+  = link_to 'Edit', [:edit, comment]
+  = link_to 'Destroy', comment, method: :delete

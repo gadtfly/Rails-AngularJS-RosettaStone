@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
   root 'comments#index'
-  resources :comments
+  resources :comments, except: [:show, :new]
 end
