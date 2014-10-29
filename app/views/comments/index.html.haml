@@ -1,3 +1,17 @@
-%h1 All Comments
-.comments
-= render partial: 'form'
+/ Note: this uses no Rails things at all, and could be served as static content
+%div{ng: {app: 'app'}}
+  %div{ng: {controller: 'CommentsController'}}
+    %h1 All Comments
+    .comments{ng: {repeat: 'comment in comments'}}
+      .comment{ng: {switch: 'comment.isEditing'}}
+        %div{ng: {switch: {when: 'true'}}}
+          %form{ng: {submit: 'updateComment(comment)'}}
+            %textarea{ng: {model: 'comment.body'}}
+            %input{type: 'submit'}
+        %div{ng: {switch: {default: true}}}
+          {{comment.body}}
+          %a{ng: {click: 'editComment(comment)'}} Edit
+          %a{ng: {click: 'destroyComment(comment)'}} Destroy
+    %form{ng: {submit: 'createComment(newComment)'}}
+      %textarea{ng: {model: 'newComment.body'}}
+      %input{type: 'submit'}
