@@ -41,3 +41,4 @@ gem 'spring',        group: :development
 
 gem 'haml-rails'
 gem 'rails-assets-angular'
+gem 'rails-assets-angular-resource'

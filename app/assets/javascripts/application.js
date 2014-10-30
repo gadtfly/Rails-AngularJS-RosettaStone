@@ -14,42 +14,21 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require angular
+//= require angular-resource
 //= require_tree .
 
 
-app = angular.module('app', [])
+app = angular.module('app', ['ngResource'])
 
 
 
 
-app.factory('Comment', ['$http', function($http){
-  var baseURL    = 'http://localhost:3000/api/v1'
-  
-  function commentsURL(){
-    return baseURL+'/comments'
-  }
-
-  function commentURL(id){
-    return baseURL+'/comments/'+id
-  }
-
-  return {
-    getComments: function(){
-      return $http.get(commentsURL())
-    },
-    getComment: function(id){
-      return $http.get(commentURL(id))
-    },
-    postComment: function(comment){
-      return $http.post(commentsURL(), comment)
-    },
-    putComment: function(comment){
-      return $http.put(commentURL(comment.id), comment)
-    },
-    deleteComment: function(comment){
-      return $http.delete(commentURL(comment.id))
+app.factory('Comment', ['$resource', function($resource){
+  return $resource('http://localhost:3000/api/v1/comments/:id', {id: '@id'}, {
+    update: {
+      method: 'PUT'
     }
-  }
+  })
 }])
 
 
@@ -57,13 +36,13 @@ app.factory('Comment', ['$http', function($http){
 
 app.controller('CommentsController', ['$scope', 'Comment', function($scope, Comment){
   $scope.indexComments = function(){
-    Comment.getComments().success(function(comments){
+    Comment.query(function(comments){
       $scope.comments = comments
     })
   }
 
   $scope.createComment = function(comment){
-    Comment.postComment(comment).success(function(comment){
+    Comment.save(comment, function(comment){
       $scope.comments.push(comment)
       $scope.newComment = {}
     })
@@ -74,13 +53,13 @@ app.controller('CommentsController', ['$scope', 'Comment', function($scope, Comm
   }
 
   $scope.updateComment = function(comment){
-    Comment.putComment(comment).success(function(){
+    Comment.update(comment, function(){
       comment.isEditing = false
     })
   }
 
   $scope.destroyComment = function(comment){
-    Comment.deleteComment(comment).success(function(){
+    Comment.delete(comment, function(){
       $scope.comments.splice($scope.comments.indexOf(comment), 1)   // ugh
     })
   }
